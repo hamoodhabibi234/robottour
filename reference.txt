@@ -1,0 +1,7 @@
+robot.forward()
+robot.backward()
+robot.right()
+robot.left()
+robot.stop()
+time.sleep()
+variablename.when_pressed
