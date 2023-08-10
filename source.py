@@ -14,6 +14,18 @@ start = Button(22)
 
 start.wait_for_press(timeout=None)
 start = time.time()
+end = time.time()
+target = 1 #target time here
 
 for i in range(1):
   robot.forward()
+  #enter code below this
+
+  while {end-start}<target:
+    robot.right()
+    time.sleep(0.1)
+    end = time.time()
+    robot.left()
+    time.sleep(0.1)
+    end = time.time()
+  
