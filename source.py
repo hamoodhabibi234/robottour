@@ -1,6 +1,8 @@
 import gpiozero
 import time
+from gpiozero import PhaseEnableRobot
 
-robot = gpiozero.Robot(left=(17,18), right=(27,22))
+robot = PhaseEnableRobot(left=(17, 18), right=(27, 22))
 
-for i in range(1)#number preceding is loop amount
+for i in range(1):
+  robot.forward()
