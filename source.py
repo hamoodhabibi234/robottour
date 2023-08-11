@@ -12,6 +12,29 @@ tof2 = Button(38)
 tof3 = Button(40)
 start = Button(13)
 
+a = 1
+b = 2
+c = 3
+d = 4
+
+startpoint = input("enter starting coordinates:")
+gz1 = input("enter closest gate zone coordinates:")
+gz2 = input("enter middle gate zone coordinates:")
+gz3 = input("enter furthest gate zone coordinates:")
+endpoint = input("enter ending coordinates:")
+
+row1 = startpoint[1]
+row2 = gz1[1]
+row3 = gz2[1]
+row4 = gz3[1]
+row5 = endpoint[1]
+
+column1 = startpoint[0]
+column2 = gz1[0]
+column3 = gz2[0]
+column4 = gz3[0]
+column5 = endpoint[0]
+
 start.wait_for_press(timeout=None)
 start = time.time()
 end = time.time()
