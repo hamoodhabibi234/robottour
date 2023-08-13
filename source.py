@@ -22,6 +22,7 @@ gz1 = input("enter closest gate zone coordinates:")
 gz2 = input("enter middle gate zone coordinates:")
 gz3 = input("enter furthest gate zone coordinates:")
 endpoint = input("enter ending coordinates:")
+target = input("target time here")
 
 row1 = startpoint[1]
 row2 = gz1[1]
@@ -38,7 +39,6 @@ column5 = endpoint[0]
 start.wait_for_press(timeout=None)
 start = time.time()
 end = time.time()
-target = 1 #target time here
 
 for i in range(1):
   #enter code below this
