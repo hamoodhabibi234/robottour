@@ -6,11 +6,11 @@ VL53L0X sensor;
 // the setup function runs once when you press reset or power the board
 
 void setup() {
-  int Led = 8;
+  /*int Led = 8;
   int 25cm = 9;
   int 75cm = 10;
   int 125cm = 11;
-  int 175cm = 12;
+  int 175cm = 12;*/
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
