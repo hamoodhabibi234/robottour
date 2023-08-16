@@ -37,7 +37,7 @@ void loop() {
   if (sensor.readRangeSingleMillimeters() >= 1740 && sensor.readRangeSingleMillimeters() <= 1760)
     digitalWrite(12, HIGH);  // turn the LED on (HIGH is the voltage level)
   digitalWrite(8, HIGH);  // turn the LED on (HIGH is the voltage level)
-  delay(10);                      // wait for a second
+  delay(100);                      // wait for a second
   digitalWrite(8, LOW);   // turn the LED off by making the voltage LOW
-  delay(10);                      // wait for a second
+  delay(100);                      // wait for a second
 }
