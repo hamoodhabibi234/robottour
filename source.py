@@ -28,9 +28,6 @@ def Magnetometer_Init():
         #Write to mode Register for selecting mode
         bus.write_byte_data(Device_Address, Register_mode, 
         0)
-	
-	
-
 def read_raw_data(addr):
     
         #Read raw 16-bit value
@@ -44,15 +41,16 @@ def read_raw_data(addr):
         if(value > 32768):
             value = value - 65536
         return value
+  
+bus = smbus.SMBus(1) 	# or bus = smbus.SMBus(0) for older version boards
+Device_Address = 0x1e   # HMC5883L magnetometer device address
+Magnetometer_Init()     # initialize HMC5883L magnetometer 
 #defines pins
 robot = PhaseEnableRobot(left=(11, 12), right=(15, 16))
-hdg90 = Button(29)
-hdg180 = Button(31)
-hdg270 = Button(33)
-hdg360 = Button(35)
-tof1 = Button(36)
-tof2 = Button(38)
-tof3 = Button(40)
+tof1 = Button(35)
+tof2 = Button(36)
+tof3 = Button(37)
+tof4 = Button(38)
 start = Button(13)
 #sets letter variables
 a = 1
@@ -72,7 +70,6 @@ row2 = gz1[1]
 row3 = gz2[1]
 row4 = gz3[1]
 row5 = endpoint[1]
-
 column1 = startpoint[0]
 column2 = gz1[0]
 column3 = gz2[0]
@@ -82,6 +79,7 @@ column5 = endpoint[0]
 start.wait_for_press(timeout=None)
 start = time.time()
 end = time.time()
+hdg = 0
 #actual code
 for i in range(1):
   #enter code below this
@@ -94,4 +92,3 @@ for i in range(1):
     robot.left()
     time.sleep(0.1)
     end = time.time()
-  
