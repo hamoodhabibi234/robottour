@@ -83,7 +83,23 @@ hdg = 0
 #actual code
 for i in range(1):
   #enter code below this
-
+#code that makes the robot go to start location
+  while not(tof1.is_pressed):
+    robot.forward
+  robot.stop
+  #does math for first checkpoint
+  ang1rad = math.atan((row1-row2)/(column1-column2))
+  ang1 = math.degrees(ang1rad)
+  if(abs(column1-column2) == column1-column2):
+    continue
+  elif(abs(row1-row2) != row1-row2):
+    ang1 = ang1+180
+  else:
+    continue
+  if(ang1 >= 360):
+    ang1 = ang1 - 360
+  #movement code for 1st checkpoint below
+  
   #end wait code
   while end - start < target:
     robot.right()
