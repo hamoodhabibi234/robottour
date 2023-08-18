@@ -81,6 +81,20 @@ start.wait_for_press(timeout=None)
 start = time.time()
 end = time.time()
 hdg = 0
+        #Read Accelerometer raw value
+        x = read_raw_data(X_axis_H)
+        z = read_raw_data(Z_axis_H)
+        y = read_raw_data(Y_axis_H)
+        hdg = math.atan2(y / x) + declination
+        #Due to declination check for >360 degree
+        if(hdg > 2*pi)
+                hdg = hdg - 2*pi
+        #check for sign
+        if(hdg < 0):
+                hdg = hdg + 2*pi
+        #convert into angle
+        hdg_angle = int(hdg * 180/pi)
+
 #actual code
 for i in range(1):
   #enter code below this
@@ -98,7 +112,10 @@ for i in range(1):
   if(ang1 >= 360):
     ang1 = ang1 - 360
   #movement code for 1st checkpoint below
-  while not(hdg_angle == ang1):{
+  inithdg = hdg_angle + 360
+  posthdg = hdg_angle + 360
+  deviation = posthdg - inithdg
+  while not(deviation == ang1):{
     robot.right()
         #Read Accelerometer raw value
         x = read_raw_data(X_axis_H)
@@ -113,9 +130,12 @@ for i in range(1):
                 hdg = hdg + 2*pi
         #convert into angle
         hdg_angle = int(hdg * 180/pi)
+        posthdg = hdg_angle + 360
+        deviation = posthdg - inithdg
   }
   robot.stop
-  if(hdg_angle <= 180 and hdg_angle >= 91):
+  if(deviation <= 180 and deviation >= 91):
+    servo.angle = 180 - deviation
     
     
   #end wait code
