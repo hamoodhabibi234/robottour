@@ -53,10 +53,10 @@ tof3 = Button(37)
 tof4 = Button(38)
 start = Button(13)
 #sets letter variables
-a = 1
-b = 2
-c = 3
-d = 4
+a = 4
+b = 3
+c = 2
+d = 1
 #asks input
 startpoint = input("enter starting coordinates:")
 gz1 = input("enter closest gate zone coordinates:")
@@ -90,16 +90,31 @@ for i in range(1):
   #does math for first checkpoint
   ang1rad = math.atan((row1-row2)/(column1-column2))
   ang1 = math.degrees(ang1rad)
-  if(abs(column1-column2) == column1-column2):
-    continue
-  elif(abs(row1-row2) != row1-row2):
-    ang1 = ang1+180
-  else:
-    continue
+  if(abs(ang1) != ang1):
+    ang1 = ang1 + 360
+  if(abs(row1-row2) != row1-row2):
+    ang1 = ang1 + 180
   if(ang1 >= 360):
     ang1 = ang1 - 360
   #movement code for 1st checkpoint below
-  
+  while not(hdg == ang1):{
+    robot.right(),
+        #Read Accelerometer raw value
+        x = read_raw_data(X_axis_H)
+        z = read_raw_data(Z_axis_H)
+        y = read_raw_data(Y_axis_H)
+        hdg = math.atan2(y / x) + declination
+        #Due to declination check for >360 degree
+        if(heading > 2*pi)
+                heading = heading - 2*pi
+        #check for sign
+        if(heading < 0):
+                heading = heading + 2*pi
+        #convert into angle
+        heading_angle = int(heading * 180/pi)
+        print ("Heading Angle = %d°" %heading_angle)
+  }
+  robot.stop
   #end wait code
   while end - start < target:
     robot.right()
@@ -108,3 +123,4 @@ for i in range(1):
     robot.left()
     time.sleep(0.1)
     end = time.time()
+  robot.stop
