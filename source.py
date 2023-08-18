@@ -4,7 +4,7 @@ import time
 import smbus
 import math
 from time import sleep
-from gpiozero import PhaseEnableRobot, Button
+from gpiozero import PhaseEnableRobot, Button, Servo
 #registers mpu
 Register_A     = 0
 Register_B     = 0x01
@@ -51,6 +51,7 @@ tof1 = Button(35)
 tof2 = Button(36)
 tof3 = Button(37)
 tof4 = Button(38)
+servo = AngularServo(40, min_angle=-90, max_angle=90)
 start = Button(13)
 #sets letter variables
 a = 4
@@ -97,24 +98,26 @@ for i in range(1):
   if(ang1 >= 360):
     ang1 = ang1 - 360
   #movement code for 1st checkpoint below
-  while not(hdg == ang1):{
-    robot.right(),
+  while not(hdg_angle == ang1):{
+    robot.right()
         #Read Accelerometer raw value
         x = read_raw_data(X_axis_H)
         z = read_raw_data(Z_axis_H)
         y = read_raw_data(Y_axis_H)
         hdg = math.atan2(y / x) + declination
         #Due to declination check for >360 degree
-        if(heading > 2*pi)
-                heading = heading - 2*pi
+        if(hdg > 2*pi)
+                hdg = hdg - 2*pi
         #check for sign
-        if(heading < 0):
-                heading = heading + 2*pi
+        if(hdg < 0):
+                hdg = hdg + 2*pi
         #convert into angle
-        heading_angle = int(heading * 180/pi)
-        print ("Heading Angle = %d°" %heading_angle)
+        hdg_angle = int(hdg * 180/pi)
   }
   robot.stop
+  if(hdg_angle <= 180 and hdg_angle >= 91):
+    
+    
   #end wait code
   while end - start < target:
     robot.right()
