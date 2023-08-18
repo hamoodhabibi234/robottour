@@ -1,33 +1,33 @@
 #imports libraries
 import gpiozero
 import time
-import smbus
 import math
+import smbus
 from time import sleep
-from gpiozero import PhaseEnableRobot, Button, Servo
-#registers mpu
-Register_A     = 0
-Register_B     = 0x01
-Register_mode  = 0x02 
+from gpiozero import PhaseEnableRobot, Button, AngularServo
+#mpu stuff
+#some MPU6050 Registers and their Address
+Register_A     = 0              #Address of Configuration register A
+Register_B     = 0x01           #Address of configuration register B
+Register_mode  = 0x02           #Address of mode register
 
-X_axis_H    = 0x03
-Z_axis_H    = 0x05
-Y_axis_H    = 0x07
-declination = -0.06487
-pi = 3.14159265359   
+X_axis_H    = 0x03              #Address of X-axis MSB data register
+Z_axis_H    = 0x05              #Address of Z-axis MSB data register
+Y_axis_H    = 0x07              #Address of Y-axis MSB data register
+declination = -0.00669          #define declination angle of location where measurement going to be done
+pi          = 3.14159265359     #define pi value
+
 
 def Magnetometer_Init():
         #write to Configuration Register A
-        bus.write_byte_data(Device_Address, Register_A, 
-        0x70)
+        bus.write_byte_data(Device_Address, Register_A, 0x70)
 
         #Write to Configuration Register B for gain
-        bus.write_byte_data(Device_Address, Register_B, 
-        0xa0)
+        bus.write_byte_data(Device_Address, Register_B, 0xa0)
 
         #Write to mode Register for selecting mode
-        bus.write_byte_data(Device_Address, Register_mode, 
-        0)
+        bus.write_byte_data(Device_Address, Register_mode, 0)
+	
 def read_raw_data(addr):
     
         #Read raw 16-bit value
@@ -41,11 +41,11 @@ def read_raw_data(addr):
         if(value > 32768):
             value = value - 65536
         return value
-  
+
 bus = smbus.SMBus(1) 	# or bus = smbus.SMBus(0) for older version boards
 Device_Address = 0x1e   # HMC5883L magnetometer device address
 Magnetometer_Init()     # initialize HMC5883L magnetometer 
-#defines pins
+#sets pins
 robot = PhaseEnableRobot(left=(11, 12), right=(15, 16))
 tof1 = Button(35)
 tof2 = Button(36)
@@ -65,6 +65,28 @@ gz2 = input("enter middle gate zone coordinates:")
 gz3 = input("enter furthest gate zone coordinates:")
 endpoint = input("enter ending coordinates:")
 target = input("target time here")
+#defines compass
+def bearing(): #Read Accelerometer raw value
+        x = read_raw_data(X_axis_H)
+        z = read_raw_data(Z_axis_H)
+        y = read_raw_data(Y_axis_H)
+
+        heading = math.atan2(y, x) + declination
+        
+        #Due to declination check for >360 degree
+        if(heading > 2*pi):
+                heading = heading - 2*pi
+
+        #check for sign
+        if(heading < 0):
+                heading = heading + 2*pi
+
+        #convert into angle
+        heading_angle = int(heading * 180/pi)
+
+        print ("Heading Angle = %d°" %heading_angle)
+        sleep(1)
+  
 #sets variables
 row1 = startpoint[1]
 row2 = gz1[1]
@@ -80,21 +102,6 @@ column5 = endpoint[0]
 start.wait_for_press(timeout=None)
 start = time.time()
 end = time.time()
-hdg = 0
-        #Read Accelerometer raw value
-        x = read_raw_data(X_axis_H)
-        z = read_raw_data(Z_axis_H)
-        y = read_raw_data(Y_axis_H)
-        hdg = math.atan2(y / x) + declination
-        #Due to declination check for >360 degree
-        if(hdg > 2*pi)
-                hdg = hdg - 2*pi
-        #check for sign
-        if(hdg < 0):
-                hdg = hdg + 2*pi
-        #convert into angle
-        hdg_angle = int(hdg * 180/pi)
-
 #actual code
 for i in range(1):
   #enter code below this
@@ -102,47 +109,12 @@ for i in range(1):
   while not(tof1.is_pressed):
     robot.forward
   robot.stop
-  #does math for first checkpoint
-  ang1rad = math.atan((row1-row2)/(column1-column2))
-  ang1 = math.degrees(ang1rad)
-  if(abs(ang1) != ang1):
-    ang1 = ang1 + 360
-  if(abs(row1-row2) != row1-row2):
-    ang1 = ang1 + 180
-  if(ang1 >= 360):
-    ang1 = ang1 - 360
-  #movement code for 1st checkpoint below
-  inithdg = hdg_angle + 360
-  posthdg = hdg_angle + 360
-  deviation = posthdg - inithdg
-  while not(deviation == ang1):{
-    robot.right()
-        #Read Accelerometer raw value
-        x = read_raw_data(X_axis_H)
-        z = read_raw_data(Z_axis_H)
-        y = read_raw_data(Y_axis_H)
-        hdg = math.atan2(y / x) + declination
-        #Due to declination check for >360 degree
-        if(hdg > 2*pi)
-                hdg = hdg - 2*pi
-        #check for sign
-        if(hdg < 0):
-                hdg = hdg + 2*pi
-        #convert into angle
-        hdg_angle = int(hdg * 180/pi)
-        posthdg = hdg_angle + 360
-        deviation = posthdg - inithdg
-  }
-  robot.stop
-  if(deviation <= 180 and deviation >= 91):
-    servo.angle = 180 - deviation
-    
-    
+
   #end wait code
   while end - start < target:
     robot.right()
     time.sleep(0.1)
-    end = time.time()
+    end = time.time(}
     robot.left()
     time.sleep(0.1)
     end = time.time()
