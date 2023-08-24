@@ -10,14 +10,11 @@ from gpiozero import PhaseEnableRobot, Button, AngularServo
 Register_A     = 0              #Address of Configuration register A
 Register_B     = 0x01           #Address of configuration register B
 Register_mode  = 0x02           #Address of mode register
-
 X_axis_H    = 0x03              #Address of X-axis MSB data register
 Z_axis_H    = 0x05              #Address of Z-axis MSB data register
 Y_axis_H    = 0x07              #Address of Y-axis MSB data register
-declination = -0.00669          #define declination angle of location where measurement going to be done
+declination = 0.7505         #define declination angle of location where measurement going to be done
 pi          = 3.14159265359     #define pi value
-
-
 def Magnetometer_Init():
         #write to Configuration Register A
         bus.write_byte_data(Device_Address, Register_A, 0x70)
@@ -83,10 +80,6 @@ def bearing(): #Read Accelerometer raw value
 
         #convert into angle
         heading_angle = int(heading * 180/pi)
-
-        print ("Heading Angle = %d°" %heading_angle)
-        sleep(1)
-  
 #sets variables
 row1 = startpoint[1]
 row2 = gz1[1]
@@ -106,16 +99,27 @@ end = time.time()
 for i in range(1):
   #enter code below this
 #code that makes the robot go to start location
-  while not(tof1.is_pressed):
-    robot.forward
-  robot.stop
-
+  while not(tof4.is_pressed):
+    robot.forward()
+  robot.stop()
+  if(row2 == 1):
+    while not(tof1.is_pressed):
+      robot.forward()
+    robot.stop()
+  elif(row2 == 2):
+    while not(tof2.is_pressed):
+      robot.forward()
+    robot.stop()
+  elif(row2 == 3):
+    while not(tof3.is_pressed):
+      robot.forward()
+    robot.stop()
   #end wait code
   while end - start < target:
     robot.right()
     time.sleep(0.1)
-    end = time.time(}
+    end = time.time()
     robot.left()
     time.sleep(0.1)
     end = time.time()
-  robot.stop
+  robot.stop()
