@@ -81,6 +81,7 @@ def bearing(): #Read Accelerometer raw value
         #convert into angle
         heading_angle = int(heading * 180/pi)
 #sets variables
+heading_angle = 0
 row1 = startpoint[1]
 row2 = gz1[1]
 row3 = gz2[1]
@@ -114,8 +115,12 @@ for i in range(1):
     while not(tof3.is_pressed):
       robot.forward()
     robot.stop()
+  if(column1 > column2):
+    while not(heading_angle == 270):
+      robot.right()
+      bearing()
   #end wait code
-  while end - start < target:
+  while(end - start < target - 10):
     robot.right()
     time.sleep(0.1)
     end = time.time()
