@@ -115,10 +115,20 @@ for i in range(1):
     while not(tof3.is_pressed):
       robot.forward()
     robot.stop()
+  elif(row2 == 4):
+    robot.stop()
   if(column1 > column2):
-    while not(heading_angle == 270):
+    while not(heading_angle == heading_angle + 90):
       robot.right()
       bearing()
+    robot.stop()
+  elif(column1 < column2):
+    while not(heading_angle == heading_angle - 90):
+      robot.left()
+      bearing()
+    robot.stop()
+  elif(column1 == column2):
+    robot.stop()
   #end wait code
   while(end - start < target - 10):
     robot.right()
